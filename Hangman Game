@@ -1,0 +1,111 @@
+"""
+File: hangman.py
+Name:
+-----------------------------
+This program plays hangman game.
+Users sees a dashed word, trying to
+correctly figure the un-dashed word out
+by inputting one character each round.
+If the user input is correct, show the
+updated word on console. Players have N_TURNS
+chances to try and win this game.
+"""
+
+
+import random
+
+
+# This constant controls the number of guess the player has.
+N_TURNS = 7
+
+
+def answer_dashed(s):
+    dashed_output = ''
+    for ch in s:
+        dashed_output += '_'
+    return dashed_output
+
+
+def finish(ans_dashed):
+    output = True
+    for ch in ans_dashed:
+        if ch == '_':
+            output = False
+    if output:
+        return True
+    else:
+        return False
+
+
+def hangman(answer, ans_dashed):
+    turns = N_TURNS
+    output = ''
+    while True:
+        if turns > 0:
+            input_ch = str(input('Your guess:'))
+            input_ch = input_ch.upper()
+            if len(input_ch) == 1 and input_ch.isalpha():
+                correct = False
+                for i in range(len(answer)):
+                    if answer[i] == input_ch[0]:
+                        output += input_ch[0]
+                        correct = True
+                    elif answer[i] == ans_dashed[i]:
+                        output += ans_dashed[i]
+                    else:
+                        output += '_'
+                ans_dashed = output
+                output = ''
+                if correct:
+                    print('You are correct!')
+                else:
+                    turns -= 1
+                    print('There is no ' + str(input_ch) + ' in the word')
+                finish_value = finish(ans_dashed)
+                if finish_value:
+                    print('You win.')
+                    print('The word is:' + str(answer))
+                    break
+                else:
+                    print('You have ', turns, 'guesses left.')
+                    print('The word looks like:' + str(ans_dashed))
+            else:
+                print('Illegal format.')
+        elif turns == 0:
+            print('You are completely hung :( ')
+            break
+
+
+def main():
+    answer = random_word()
+    ans_dashed = answer_dashed(answer)
+    print('The word looks like:' + str(ans_dashed))
+    print('You have ', N_TURNS, ' guesses left.')
+    hangman(answer, ans_dashed)
+
+
+def random_word():
+    num = random.choice(range(9))
+    if num == 0:
+        return "NOTORIOUS"
+    elif num == 1:
+        return "GLAMOROUS"
+    elif num == 2:
+        return "CAUTIOUS"
+    elif num == 3:
+        return "DEMOCRACY"
+    elif num == 4:
+        return "BOYCOTT"
+    elif num == 5:
+        return "ENTHUSIASTIC"
+    elif num == 6:
+        return "HOSPITALITY"
+    elif num == 7:
+        return "BUNDLE"
+    elif num == 8:
+        return "REFUND"
+
+
+#####  DO NOT EDIT THE CODE BELOW THIS LINE  #####
+if __name__ == '__main__':
+    main()
